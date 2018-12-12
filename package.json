@@ -1,33 +1,24 @@
 {
-  "name": "projeth2-1-serv",
-  "version": "1.0.0",
-  "description": "School Project",
-  "main": "server.js",
+  "name": "test",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon -e js,graphql -x node -r dotenv/config src/index.js",
+    "debug": "nodemon -e js,graphql -x node --inspect -r dotenv/config src/index.js",
+    "nodemon": "nodemon"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alphonseb/projetH2-1-serv.git"
-  },
-  "author": "Jules Guesnon",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/alphonseb/projetH2-1-serv/issues"
-  },
-  "homepage": "https://github.com/alphonseb/projetH2-1-serv#readme",
   "dependencies": {
-    "apollo-server": "^2.2.6",
-    "graphql": "^14.0.2"
+    "bcryptjs": "2.4.3",
+    "graphql-yoga": "1.16.7",
+    "jsonwebtoken": "8.4.0",
+    "prisma-client-lib": "1.22.1"
   },
   "devDependencies": {
-    "n": "^5.10.0",
+    "dotenv": "6.2.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-watch": "^4.0.2"
+    "nodemon": "1.18.8",
+    "prisma": "1.22.1"
   }
 }

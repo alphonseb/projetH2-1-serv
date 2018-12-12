@@ -1,0 +1,8 @@
+{
+    "extends": "standard",
+    "rules": {
+        "indent": ["error", 4],
+        "brace-style": ["error","stroustrup"],
+        "curly": ["warn", "multi"]
+    }
+}
