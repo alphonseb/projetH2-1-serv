@@ -1,0 +1,33 @@
+{
+  "name": "projeth2-1-serv",
+  "version": "1.0.0",
+  "description": "School Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphonseb/projetH2-1-serv.git"
+  },
+  "author": "Jules Guesnon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alphonseb/projetH2-1-serv/issues"
+  },
+  "homepage": "https://github.com/alphonseb/projetH2-1-serv#readme",
+  "dependencies": {
+    "apollo-server": "^2.2.6",
+    "graphql": "^14.0.2"
+  },
+  "devDependencies": {
+    "n": "^5.10.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-watch": "^4.0.2"
+  }
+}
