@@ -1,6 +1,8 @@
-const Query = require('./query.graphql')
-const Mutation = require('./mutation.graphql')
-const User = require('./user.graphql')
-const Book = require('./book.graphql')
+const { graphQlRequire } = require('../../utils')
+
+const Query = graphQlRequire(__dirname + '/query.graphql')
+const Mutation = graphQlRequire(__dirname + '/mutations.graphql')
+const User = graphQlRequire(__dirname + '/user.graphql')
+const Book = graphQlRequire(__dirname + '/book.graphql')
 
 module.exports = [Query, Mutation, User, Book]

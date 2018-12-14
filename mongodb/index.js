@@ -16,20 +16,6 @@ const User = mongoose.model('Home',{
     sports: [{type: String}]
 }, 'user' )
 
-// const Concert = mongoose.model('Concert',{
-//     _id: mongoose.Schema.Types.ObjectId,
-//     description: {type: String, trim: true},
-//     place: {type: String,trim: true},
-//     month: {type: String, trim: true},
-//     day: {type: String, trim: true},
-//     hour: {type: String, trim: true}
-// }, 'concert')
-
-// const Pswd = mongoose.model('Pswd',{
-//     _id: mongoose.Schema.Types.ObjectId,
-//     pswd: String
-// }, 'pswd')
-
 // const Medias = mongoose.model('Medias',{
 //     _id: mongoose.Schema.Types.ObjectId,
 //     path: String,

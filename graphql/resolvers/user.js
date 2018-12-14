@@ -2,9 +2,10 @@ const { getUserId } = require('../../utils')
 
 module.exports = {
     Query: {
-        async me (parent, args, { req }, info) {
+        async me (parent, args, { req, mongoSchemas }, info) {
             const id = await getUserId(req)
-            const user = await context.mongoSchemas.User.findById(id)
+            const user = await mongoSchemas.User.findById(id)
+
             return user
         }
     },
