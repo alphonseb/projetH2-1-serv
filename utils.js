@@ -1,10 +1,11 @@
+const { APP_SECRET } = require('dotenv').config({ path: './.env'}).parsed
 const jwt = require('jsonwebtoken')
 
-function getUserId(context) {
-  const Authorization = context.request.get('Authorization')
+const getUserId = (req) => {
+  const Authorization = req.headers.authorization
   if (Authorization) {
     const token = Authorization.replace('Bearer ', '')
-    const { userId } = jwt.verify(token, process.env.APP_SECRET)
+    const { userId } = jwt.verify(token, APP_SECRET)
     return userId
   }
 

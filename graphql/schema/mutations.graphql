@@ -1,0 +1,35 @@
+type Mutation {
+    signup(password: String! mail: String! name: String! gender: String! birth: BirthInput!): AuthPayload!
+    login(password: String! mail: String!): AuthPayload!
+    updateMe(data: updateUserData): User!
+    pushMeData(type: PushType! values: [String!]!): User!
+    removeMeData(type: PushType! values: [String!]!): User!
+}
+
+enum PushType {
+    HOBBIES
+    SPORTS
+}
+
+input updateUserData {
+    name: String
+    mail: String
+    password: String
+    gender: String
+    birth: BirthInput
+    phone: String
+    work: String
+    loveSituation: String
+    hobbies: [String]
+    sports: [String]
+}
+
+input BirthInput {
+    date: Date
+    place: String
+}
+
+type AuthPayload {
+    token: String!
+    user: User!
+}

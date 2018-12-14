@@ -1,0 +1,12 @@
+type Book {
+    id: ID!
+    title: String!
+    author: User!
+    content: String
+    media: [Media]
+}
+
+type Media {
+    id: ID!
+    src: String!
+}

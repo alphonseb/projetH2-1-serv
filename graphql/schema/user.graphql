@@ -1,0 +1,21 @@
+scalar Date
+
+type User {
+    id: ID!
+    name: String!
+    mail: String!
+    password: String!
+    gender: String!
+    phone: String
+    birth: Birth
+    work: String
+    loveSituation: String
+    hobbies: [String]
+    sports: [String]
+    books: [Book]
+}
+
+type Birth {
+    date: Date!
+    place: String
+}
