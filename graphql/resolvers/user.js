@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const { getUserId } = require('../../utils')
 
 module.exports = {
@@ -34,6 +36,13 @@ module.exports = {
             user[type] = user[type].filter(v => !values.includes(v))
 
             return await mongoSchemas.User.findByIdAndUpdate(id, {$set: { [type]: user[type] }}, { new: true })
+        }
+    },
+    resolvers: {
+        async books (user, args, { mongoSchemas }) {          
+            return await mongoSchemas.Book
+                .find({ author: user._id}, null, { limit: args.limit ? args.limit : null })
+                .sort(`${args.order === 'DATE_ASC' ? '' : '-'}date`)
         }
     }
 }

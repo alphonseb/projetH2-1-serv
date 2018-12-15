@@ -12,10 +12,15 @@ type User {
     loveSituation: String
     hobbies: [String]
     sports: [String]
-    books: [Book]
+    books(limit: Int order: BookOrder!): [Book]
 }
 
 type Birth {
     date: Date!
     place: String
+}
+
+enum BookOrder {
+    DATE_ASC
+    DATE_DESC
 }

@@ -4,7 +4,12 @@ type Mutation {
     updateMe(data: updateUserData): User!
     pushMeData(type: PushType! values: [String!]!): User!
     removeMeData(type: PushType! values: [String!]!): User!
-    createBook(title: String! author: String! Medias: [Media]): Book!
+    createBook(title: String! content: String! date: Date!): Book!
+}
+
+type AuthPayload {
+    token: String!
+    user: User!
 }
 
 enum PushType {
@@ -28,9 +33,4 @@ input updateUserData {
 input BirthInput {
     date: Date
     place: String
-}
-
-type AuthPayload {
-    token: String!
-    user: User!
 }

@@ -24,7 +24,8 @@ const Book = mongoose.model('Book', {
     content: {type: String, trim: true},
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
     medias: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Media' }],
-    date: {type: Date, default: new Date()}
+    date: {type: Date},
+    createdAt: {type: Date, default: new Date()}
 }, 'book')
 
 const Media = mongoose.model('Media',{

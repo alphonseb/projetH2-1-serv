@@ -6,6 +6,7 @@ type Book {
     medias: [Media]
     comments: [Comment]
     date: Date
+    createdAt: Date
 }
 
 type Media {
