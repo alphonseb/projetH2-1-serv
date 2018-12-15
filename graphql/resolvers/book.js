@@ -20,11 +20,13 @@ module.exports = {
         async updateBook (parent, args, { req, mongoSchemas }) {
             const userId = getUserId(req)
             return await mongoSchemas.Book.findOneAndUpdate({ _id: args.id, author: userId }, { ...args }, { new: true })
+        },
+        async deleteBook (parent, { id }, { req, mongoSchemas }) {
+            const userId = getUserId(req)
+            return await mongoSchemas.Book.findOneAndDelete({ _id: id, author: userId })
         }
     },
     resolvers: {
-        async author (book, args, { mongoSchemas }) {
-            return await mongoSchemas.User.findById(book.author)
-        }
+        author: async (book, args, { mongoSchemas }) => await mongoSchemas.User.findById(book.author)
     }
 }

@@ -6,6 +6,10 @@ type Mutation {
     removeMeData(type: PushType! values: [String!]!): User!
     createBook(title: String! content: String! date: Date!): Book!
     updateBook(id: String! title: String content: String date: Date): Book!
+    deleteBook(id: String!): Book!
+    addComment(bookId: String! content: String!): Comment!
+    updateComment(id: String! content: String!): Comment!
+    deleteComment(id: String!): Comment!
 }
 
 type AuthPayload {
