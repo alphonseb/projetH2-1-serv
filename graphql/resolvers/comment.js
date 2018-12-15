@@ -5,11 +5,12 @@ const { getUserId } = require('../../utils')
 module.exports = {
     Query: {},
     Mutation: {
-        async addComment (parent, { content }, { req, mongoSchemas }) {
+        async addComment (parent, { bookId, content }, { req, mongoSchemas }) {
             const userId = await getUserId(req)
             return await new mongoSchemas.Comment({
                 _id: mongoose.Types.ObjectId(),
                 author: userId,
+                book: bookId,
                 content
             }).save()
         },
@@ -23,6 +24,7 @@ module.exports = {
         }
     },
     resolvers: {
-        author: async (comment, args, { mongoSchemas }) => await mongoSchemas.User.findById(comment.author)
+        author: async (comment, args, { mongoSchemas }) => await mongoSchemas.User.findById(comment.author),
+        book: async (comment, args, { mongoSchemas }) => await  mongoSchemas.Book.findById(comment.book)
     }
 }

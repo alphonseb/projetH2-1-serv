@@ -37,6 +37,7 @@ const Media = mongoose.model('Media',{
 
 const Comment = mongoose.model('Comment', {
     _id: mongoose.Schema.Types.ObjectId,
+    book: {type: mongoose.Schema.Types.ObjectId, ref: 'Book'},
     author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     content: {type: String, trim: true},
     date: {type: Date, default: new Date()}

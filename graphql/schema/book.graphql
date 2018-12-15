@@ -19,6 +19,7 @@ type Media {
 type Comment {
     id: ID!
     author: User!
+    book: Book!
     content: String!
     date: Date
 }

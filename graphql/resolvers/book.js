@@ -27,6 +27,7 @@ module.exports = {
         }
     },
     resolvers: {
-        author: async (book, args, { mongoSchemas }) => await mongoSchemas.User.findById(book.author)
+        author: async (book, args, { mongoSchemas }) => await mongoSchemas.User.findById(book.author),
+        comments: async (book, args, { mongoSchemas }) => await mongoSchemas.Comment.find({book: book.id})
     }
 }
