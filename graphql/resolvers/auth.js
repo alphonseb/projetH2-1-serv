@@ -8,7 +8,7 @@ module.exports = {
     Mutation: {
         async signup (parent, args, { mongoSchemas }) {
             const pass = await bcrypt.hash(args.password, 10)
-            const user = await new mongoSchemas.User({_id: mongoose.Types.ObjectId(), password: pass, ...args}).save()
+            const user = await new mongoSchemas.User({_id: mongoose.Types.ObjectId(), ...args, password: pass,}).save()
             return {
                 token: await jwt.sign({ userId: user._id}, APP_SECRET),
                 user

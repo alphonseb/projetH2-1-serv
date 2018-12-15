@@ -4,11 +4,23 @@ const { getUserId } = require('../../utils')
 
 module.exports = {
     Query: {
-        async me (parent, args, { req, mongoSchemas }, info) {
+        async me (parent, args, { req, mongoSchemas }) {
             const id = await getUserId(req)
             const user = await mongoSchemas.User.findById(id)
 
             return user
+        },
+        async user (parent, { id }, { mongoSchemas }) {
+            const user = await mongoSchemas.User.findById(id)
+            
+            if (!user)
+                throw new Error('The id doesn\'t match any user')
+
+            return user
+        },
+        async searchUser (parent, { name }, { mongoSchemas }) {
+            const users = mongoSchemas.User.find({ name: { $regex: name, $options: 'gi' }}) 
+            return users
         }
     },
     Mutation: {
