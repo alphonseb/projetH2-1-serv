@@ -14,9 +14,8 @@ module.exports = {
             const id = await getUserId(req)
             const user = await mongoSchemas.User.findById(id)
 
-            if (args.data.birth) {
+            if (args.data.birth)
                 args.data.birth = { ...user.birth, ...args.data.birth}
-            }
 
             return await mongoSchemas.User.findByIdAndUpdate(id, { $set: args.data}, { new: true })
         },
@@ -35,7 +34,6 @@ module.exports = {
             user[type] = user[type].filter(v => !values.includes(v))
 
             return await mongoSchemas.User.findByIdAndUpdate(id, {$set: { [type]: user[type] }}, { new: true })
-
         }
     }
 }

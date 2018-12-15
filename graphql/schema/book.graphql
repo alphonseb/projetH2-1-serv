@@ -2,11 +2,22 @@ type Book {
     id: ID!
     title: String!
     author: User!
-    content: String
-    media: [Media]
+    content: String!
+    medias: [Media]
+    comments: [Comment]
+    date: Date
 }
 
 type Media {
     id: ID!
+    author: User!
     src: String!
+    date: Date
+}
+
+type Comment {
+    id: ID!
+    author: User!
+    content: String!
+    date: Date
 }

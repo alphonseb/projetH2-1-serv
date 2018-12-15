@@ -4,6 +4,7 @@ type Mutation {
     updateMe(data: updateUserData): User!
     pushMeData(type: PushType! values: [String!]!): User!
     removeMeData(type: PushType! values: [String!]!): User!
+    createBook(title: String! author: String! Medias: [Media]): Book!
 }
 
 enum PushType {
