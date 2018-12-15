@@ -15,7 +15,16 @@ module.exports = {
                 content,
                 date: Date.parse(date)
             }).save()
-            return await mongoSchemas.Book.findById(bookId).populate('author')
+            return await mongoSchemas.Book.findById(bookId)
+        },
+        async updateBook (parent, args, { req, mongoSchemas }) {
+            const userId = getUserId(req)
+            return await mongoSchemas.Book.findOneAndUpdate({ _id: args.id, author: userId }, { ...args }, { new: true })
+        }
+    },
+    resolvers: {
+        async author (book, args, { mongoSchemas }) {
+            return await mongoSchemas.User.findById(book.author)
         }
     }
 }

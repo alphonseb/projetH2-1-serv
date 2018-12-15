@@ -13,5 +13,8 @@ module.exports = {
     },
     User: {
         ...User.resolvers
+    },
+    Book: {
+        ...Book.resolvers
     }
 }

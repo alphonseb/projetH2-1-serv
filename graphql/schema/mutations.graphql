@@ -5,6 +5,7 @@ type Mutation {
     pushMeData(type: PushType! values: [String!]!): User!
     removeMeData(type: PushType! values: [String!]!): User!
     createBook(title: String! content: String! date: Date!): Book!
+    updateBook(id: String! title: String content: String date: Date): Book!
 }
 
 type AuthPayload {
