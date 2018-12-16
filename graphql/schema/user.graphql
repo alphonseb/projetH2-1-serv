@@ -5,6 +5,7 @@ type User {
     name: String!
     mail: String!
     password: String!
+    profilePicture: Media!
     gender: String!
     phone: String
     birth: Birth

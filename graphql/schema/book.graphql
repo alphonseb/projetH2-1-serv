@@ -3,23 +3,10 @@ type Book {
     title: String!
     author: User!
     content: String!
-    medias: [Media]
     comments: [Comment]
     date: Date
+    medias: [Media!]
     createdAt: Date
-}
-
-type Media {
-    id: ID!
-    author: User!
-    src: String!
-    date: Date
-}
-
-type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
 }
 
 type Comment {

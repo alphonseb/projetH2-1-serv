@@ -1,0 +1,5 @@
+type Media {
+    id: ID!
+    src: String!
+    author: User!
+}

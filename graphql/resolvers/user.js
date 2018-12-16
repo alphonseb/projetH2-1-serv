@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const { getUserId } = require('../../utils')
+const { getUserId, writeFile } = require('../../utils')
 
 module.exports = {
     Query: {
@@ -31,6 +31,23 @@ module.exports = {
             if (args.data.birth)
                 args.data.birth = { ...user.birth, ...args.data.birth}
 
+            if (typeof args.data.profilePicture !== undefined) {
+                const { filename, createReadStream } = await args.data.profilePicture
+                const src = await writeFile(id, filename, 'profilePic', createReadStream)
+
+                if (typeof user.profilePicture !== undefined) {
+                    mongoSchemas.Media.findOneAndDelete({ _id: user.profilePicture })
+                }
+
+                const media = await new mongoSchemas.Media({
+                    _id: mongoose.Types.ObjectId(),
+                    src,
+                    author: user._id
+                }).save()
+
+                args.data.profilePicture = media._id
+            }
+
             return await mongoSchemas.User.findByIdAndUpdate(id, { $set: args.data}, { new: true })
         },
         async pushMeData (parent, { type, values }, { req, mongoSchemas }) {
@@ -55,6 +72,15 @@ module.exports = {
             return await mongoSchemas.Book
                 .find({ author: user._id}, null, { limit: args.limit ? args.limit : null })
                 .sort(`${args.order === 'DATE_ASC' ? '' : '-'}date`)
+        },
+        async profilePicture (user, args, { mongoSchemas }) {
+            if (!user.profilePicture)
+                return {
+                    id: '',
+                    src: '',
+                    author: ''
+                }
+            return await mongoSchemas.Media.findById(user.profilePicture)
         }
     }
 }

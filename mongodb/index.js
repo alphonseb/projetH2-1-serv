@@ -5,6 +5,7 @@ const User = mongoose.model('User',{
     name: {type: String, trim: true},
     password: {type: String},
     mail: {type: String, trim: true},
+    profilePicture: { type: mongoose.Schema.Types.ObjectId, ref: 'Media'},
     gender: {type: String},
     birth: {
         date: Date,
@@ -32,7 +33,6 @@ const Media = mongoose.model('Media',{
     _id: mongoose.Schema.Types.ObjectId,
     author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     src: String,
-    date: {type: Date, default: new Date()},
 }, 'media')
 
 const Comment = mongoose.model('Comment', {
