@@ -3,6 +3,7 @@ const Auth = require('./auth')
 const Book = require('./book')
 const Comment = require('./comment')
 const Media = require('./media')
+const Notification = require('./notification')
 
 module.exports = {
     Query: {
@@ -13,7 +14,8 @@ module.exports = {
         ...Auth.Mutation,
         ...Book.Mutation,
         ...Comment.Mutation,
-        ...Media.Mutation
+        ...Media.Mutation,
+        ...Notification.Mutation
     },
     User: {
         ...User.resolvers
@@ -26,5 +28,8 @@ module.exports = {
     },
     Media: {
         ...Media.resolvers
+    },
+    Notification: {
+        ...Notification.resolvers
     }
 }

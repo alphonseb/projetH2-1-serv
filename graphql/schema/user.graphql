@@ -14,11 +14,22 @@ type User {
     hobbies: [String]
     sports: [String]
     books(limit: Int order: BookOrder!): [Book]
+    notifications: [Notification!]!
 }
 
 type Birth {
     date: Date!
     place: String
+}
+
+type Notification {
+    id: ID!
+    content: String!
+    from: User
+    to: User!
+    isRead: Boolean!
+    type: String!
+    date: Date!
 }
 
 enum BookOrder {

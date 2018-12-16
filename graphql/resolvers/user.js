@@ -81,6 +81,7 @@ module.exports = {
                     author: ''
                 }
             return await mongoSchemas.Media.findById(user.profilePicture)
-        }
+        },
+        notifications: async (user, args, { mongoSchemas }) => await mongoSchemas.Notification.find({ to: user._id})
     }
 }

@@ -4,6 +4,8 @@ type Mutation {
     updateMe(data: updateUserData): User!
     pushMeData(type: PushType! values: [String!]!): User!
     removeMeData(type: PushType! values: [String!]!): User!
+    createNotification(to: String! content: String! from: String type: notificationType!): Notification
+    readNotifications(ids: [String!]!): MultipleUpdate
     createBook(title: String! content: String! date: Date!): Book!
     updateBook(id: String! title: String content: String date: Date): Book!
     deleteBook(id: String!): Book!
@@ -18,6 +20,17 @@ type Mutation {
 type AuthPayload {
     token: String!
     user: User!
+}
+
+type MultipleUpdate {
+    found: Int
+    modified: Int
+    ok: Int
+}
+
+enum notificationType {
+    INFO
+    VALIDATE
 }
 
 enum PushType {

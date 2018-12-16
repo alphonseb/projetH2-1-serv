@@ -15,7 +15,8 @@ const User = mongoose.model('User',{
     loveSituation: {type: String},
     hobbies: [{type: String}],
     sports: [{type: String}],
-    books: [{type: mongoose.Schema.Types.ObjectId, ref: 'Book'}]
+    books: [{type: mongoose.Schema.Types.ObjectId, ref: 'Book'}],
+    notifications: [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification'}]
 }, 'user' )
 
 const Book = mongoose.model('Book', {
@@ -37,6 +38,16 @@ const Media = mongoose.model('Media',{
     description: String
 }, 'media')
 
+const Notification = mongoose.model('Notification', {
+    _id: mongoose.Schema.Types.ObjectId,
+    content: {type: String, trim: true},
+    from: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    to: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    isRead: {type: Boolean, default: false},
+    type: String,
+    date: {type: Date, default: new Date()}
+}, 'notification')
+
 const Comment = mongoose.model('Comment', {
     _id: mongoose.Schema.Types.ObjectId,
     book: {type: mongoose.Schema.Types.ObjectId, ref: 'Book'},
@@ -49,7 +60,8 @@ const schemas = {
     User,
     Book,
     Media,
-    Comment
+    Comment,
+    Notification
 }
 
 module.exports = schemas
