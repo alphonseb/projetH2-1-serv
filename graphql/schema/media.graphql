@@ -2,4 +2,5 @@ type Media {
     id: ID!
     src: String!
     author: User!
+    book: Book
 }

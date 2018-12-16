@@ -19,7 +19,7 @@ const graphQlRequire = (_path) => {
 
 const writeFile = async (_id, _name, _type, _createReadStream) => {
     const splittedName = _name.split('.')
-    const name = `${_id}-profilePic.${splittedName[splittedName.length - 1]}`
+    const name = `${_id}-${_type}.${splittedName[splittedName.length - 1]}`
     const filePath = `upload/${name}`
 
     // Create the file
@@ -31,6 +31,13 @@ const writeFile = async (_id, _name, _type, _createReadStream) => {
 
     return `${APP_URL}/static/${name}`
 }
+
+const deleteFile = async (_src) => {
+    const path = _src.split('/')
+    fs.unlinkSync(`upload/${path[path.length - 1]}`)
+    return true
+}
+
 class AuthError extends Error {
     constructor() {
         super('Not authorized')
@@ -41,5 +48,6 @@ module.exports = {
     getUserId,
     graphQlRequire,
     AuthError,
-    writeFile
+    writeFile,
+    deleteFile
 }

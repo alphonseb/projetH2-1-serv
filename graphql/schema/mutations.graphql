@@ -7,6 +7,9 @@ type Mutation {
     createBook(title: String! content: String! date: Date!): Book!
     updateBook(id: String! title: String content: String date: Date): Book!
     deleteBook(id: String!): Book!
+    addMedia(bookId: String! file: Upload! description: String!): Media!
+    updateMedia(id: String! description: String!): Media!
+    deleteMedia(id: String!): Media!
     addComment(bookId: String! content: String!): Comment!
     updateComment(id: String! content: String!): Comment!
     deleteComment(id: String!): Comment!

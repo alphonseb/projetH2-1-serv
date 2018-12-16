@@ -6,15 +6,13 @@ module.exports = {
     Mutation: {
         async createBook (parent, { title, content, date }, { req, mongoSchemas }) {
             const id = await getUserId(req)
-            const bookId = mongoose.Types.ObjectId()
-            await new mongoSchemas.Book({
-                _id: bookId,
+            return await await new mongoSchemas.Book({
+                _id: mongoose.Types.ObjectId(),
                 title,
                 author: id,
                 content,
                 date: Date.parse(date)
             }).save()
-            return await mongoSchemas.Book.findById(bookId)
         },
         async updateBook (parent, args, { req, mongoSchemas }) {
             const userId = getUserId(req)
@@ -27,6 +25,7 @@ module.exports = {
     },
     resolvers: {
         author: async (book, args, { mongoSchemas }) => await mongoSchemas.User.findById(book.author),
-        comments: async (book, args, { mongoSchemas }) => await mongoSchemas.Comment.find({book: book.id})
+        comments: async (book, args, { mongoSchemas }) => await mongoSchemas.Comment.find({book: book.id}),
+        medias: async (book, args, { mongoSchemas }) => await mongoSchemas.Media.find({ _id: { $in: book.medias }})
     }
 }
