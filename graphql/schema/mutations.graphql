@@ -10,6 +10,7 @@ type Mutation {
     addComment(bookId: String! content: String!): Comment!
     updateComment(id: String! content: String!): Comment!
     deleteComment(id: String!): Comment!
+    singleUpload(file: Upload!): File!
 }
 
 type AuthPayload {
