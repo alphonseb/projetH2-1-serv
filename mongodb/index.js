@@ -19,6 +19,31 @@ const User = mongoose.model('User',{
     notifications: [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification'}]
 }, 'user' )
 
+const Family = mongoose.model('Family', {
+    _id: mongoose.Schema.Types.ObjectId,
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    father: {
+        isVerified: { type: Boolean, default: false },
+        node: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    },
+    mother: {
+        isVerified: { type: Boolean, default: false },
+        node: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    },
+    fratery: [{
+        isVerified: { type: Boolean, default: false },
+        node: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    }],
+    partner: {
+        isVerified: { type: Boolean, default: false },
+        node: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    },
+    children: [{
+        isVerified: { type: Boolean, default: false },
+        node: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    }]
+}, 'family')
+
 const Book = mongoose.model('Book', {
     _id: mongoose.Schema.Types.ObjectId,
     title: {type: String, trim: true},
@@ -58,6 +83,7 @@ const Comment = mongoose.model('Comment', {
 
 const schemas = {
     User,
+    Family,
     Book,
     Media,
     Comment,

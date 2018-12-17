@@ -6,6 +6,8 @@ type Mutation {
     removeMeData(type: PushType! values: [String!]!): User!
     createNotification(to: String! content: String! from: String type: notificationType!): Notification
     readNotifications(ids: [String!]!): MultipleUpdate
+    addFamilyMember(users: [addFamilyInput!]!): [FamilyUser]
+    familyMemberHasVerify(fromId: String!, type: familyType): User
     createBook(title: String! content: String! date: Date!): Book!
     updateBook(id: String! title: String content: String date: Date): Book!
     deleteBook(id: String!): Book!
@@ -26,6 +28,14 @@ type MultipleUpdate {
     found: Int
     modified: Int
     ok: Int
+}
+
+enum familyType {
+    FATHER
+    MOTHER
+    FRATERY
+    PARTNER
+    CHILDREN
 }
 
 enum notificationType {
@@ -55,4 +65,9 @@ input updateUserData {
 input BirthInput {
     date: Date
     place: String
+}
+
+input addFamilyInput {
+    id: String! 
+    type: familyType
 }

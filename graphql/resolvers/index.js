@@ -31,5 +31,8 @@ module.exports = {
     },
     Notification: {
         ...Notification.resolvers
+    },
+    Family: {
+        ...User.Family
     }
 }

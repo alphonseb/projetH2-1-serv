@@ -15,6 +15,7 @@ type User {
     sports: [String]
     books(limit: Int order: BookOrder!): [Book]
     notifications: [Notification!]!
+    family: Family
 }
 
 type Birth {
@@ -30,6 +31,19 @@ type Notification {
     isRead: Boolean!
     type: String!
     date: Date!
+}
+
+type Family {
+    mother: FamilyUser!
+    father: FamilyUser!
+    fratery: [FamilyUser!]!
+    partner: FamilyUser!
+    children: [FamilyUser!]!
+}
+
+type FamilyUser {
+    isVerified: Boolean!
+    node: User!
 }
 
 enum BookOrder {
