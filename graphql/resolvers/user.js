@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 const { getUserId, writeFile } = require('../../utils')
 
 const oppositeFamilyType = {
-    father: 'child',
-    mother: 'child',
+    father: 'children',
+    mother: 'children',
     fratery: 'fratery',
     partner: 'partner',
     children: 'parent'
@@ -82,8 +82,8 @@ module.exports = {
 
                 const fromUserId = getUserId(req)
 
-                const fromUserGender = mongoSchemas.User.findById(fromUserId, 'gender')
-                const toUserGender = mongoSchemas.User.findById(id, 'gender')
+                // const fromUserGender = mongoSchemas.User.findById(fromUserId, 'gender')
+                const { gender } = await mongoSchemas.User.findById(id, 'gender')
 
                 switch (type) {
                     case 'father':
@@ -91,7 +91,7 @@ module.exports = {
                             isVerified: false,
                             node: id
                         }}}, { new: true }))
-                        returnUsers.push(await mongoSchemas.Family.findOneAndUpdate({ user: id }, { $set: { [oppositeFamilyType[type]]: {
+                        returnUsers.push(await mongoSchemas.Family.findOneAndUpdate({ user: id }, { $push: { [oppositeFamilyType[type]]: {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
@@ -102,7 +102,7 @@ module.exports = {
                             isVerified: false,
                             node: id
                         }}}, { new: true }))
-                        returnUsers.push(await mongoSchemas.Family.findOneAndUpdate({ user: id }, { $set: { [oppositeFamilyType[type]]: {
+                        returnUsers.push(await mongoSchemas.Family.findOneAndUpdate({ user: id }, { $push: { [oppositeFamilyType[type]]: {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
@@ -136,8 +136,9 @@ module.exports = {
                             node: id
                         }}}, { new: true }))
 
-                        const parentType = toUserGender === 'homme' ? 'father' : 'mother'
-                        returnUsers.push(await mongoSchemas.Family.findOneAndUpdate({ user: id }, { $push: { [parentType]: {
+                        const parentType = gender.toLowerCase() === 'homme' ? 'father' : 'mother'
+
+                        returnUsers.push(await mongoSchemas.Family.findOneAndUpdate({ user: id }, { $set: { [parentType]: {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
@@ -151,12 +152,109 @@ module.exports = {
             return returnUsers
         },
         async familyMemberHasVerify (parent, { fromId, type }, { req, mongoSchemas }) {
-            const id = await getUserId(req)
-            const toUserFamily = await mongoSchemas.Family.findOne({ user: id })
-            const fromUserFamily = await mongoSchemas.Family.findOne({ user: fromId })
-            console.log(toUserFamily)
-            console.log(fromUserFamily)
-            return
+            type = type.toLowerCase()
+
+            const toId = await getUserId(req)
+            const fromUserFamily = await mongoSchemas.Family.findOne({ user: fromId }, type)
+            const toUserFamily = await mongoSchemas.Family.findOne({ user: toId }, oppositeFamilyType[type])
+            let newChildren
+
+            switch (type) {
+                case 'father':
+                    await mongoSchemas.Family.findOneAndUpdate({ user: fromId }, { $set: {
+                        [type]: {
+                            isVerified: true,
+                            node: fromUserFamily[type].node
+                        }
+                    }})
+
+                    newChildren = await toUserFamily.children.map(_child => {
+                        if (_child.node == fromId)
+                            _child.isVerified = true
+
+                        return _child
+                    })
+
+                    await mongoSchemas.Family.findOneAndUpdate({ user: toId }, { $set: { children: newChildren}})
+                    break;
+            
+                case 'mother':
+                    await mongoSchemas.Family.findOneAndUpdate({ user: fromId }, { $push: {
+                        [type]: {
+                            isVerified: true,
+                            node: fromUserFamily[type].node
+                        }
+                    }})
+                    newChildren = await toUserFamily.children.map(_child => {
+                        if (_child.node == fromId)
+                            _child.isVerified = true
+
+                        return _child
+                    })
+                    await mongoSchemas.Family.findOneAndUpdate({ user: toId }, { $set: { children: newChildren}})
+                    break;
+
+                case 'fratery':
+                    const fromFratery = await toUserFamily.fratery.map(_broSis => {
+                        if (_broSis.node == fromId)
+                            _broSis.isVerified = true
+
+                        return _broSis
+                    })
+                    await mongoSchemas.Family.findOneAndUpdate({ user: fromId }, { $set: {fratery: fromFratery }})
+
+                    const toFratery = await toUserFamily.fratery.map(_broSis => {
+                        if (_broSis.node == toId)
+                            _broSis.isVerified = true
+
+                        return _broSis
+                    })
+                    await mongoSchemas.Family.findOneAndUpdate({ user: toId }, { $set: {fratery: toFratery }})
+                    break;
+
+                case 'partner':
+                    await mongoSchemas.Family.findOneAndUpdate({ user: fromId }, { $set: {
+                        [type]: {
+                            isVerified: true,
+                            node: fromUserFamily[type].node
+                        }
+                    }})
+                    await mongoSchemas.Family.findOneAndUpdate({ user: toId }, { $set: {
+                        [oppositeFamilyType[type]]: {
+                            isVerified: true,
+                            node: toUserFamily[oppositeFamilyType[type]].node
+                        }
+                    }})
+                    break;
+
+                case 'children':
+                    const { gender } = await mongoSchemas.User.findById(toId, 'gender')
+
+                    const otherType = gender.toLowerCase() === 'homme' ? 'father': 'mother'
+
+                    await mongoSchemas.Family.findOneAndUpdate({ user: toId}, { $set: {
+                        [otherType]: {
+                            isVerified: true,
+                            node: fromId
+                        }
+                    }})
+
+                    newChildren = await fromUserFamily.children.map(_child => {
+                        if (_child.node == toId)
+                            _child.isVerified = true
+
+                        return _child
+                    })
+
+                    await mongoSchemas.Family.findOneAndUpdate({ user: fromId}, { $set: {
+                        children: newChildren
+                    }})
+                    break;
+            }
+
+            return {
+                id: ''
+            }
         }
     },
     resolvers: {
@@ -180,7 +278,7 @@ module.exports = {
     Family: {
         mother: async (family, args, { mongoSchemas }) => {
             const isVerified = family.mother.isVerified
-            const node = await mongoSchemas.User.findById(family.father.node)
+            const node = await mongoSchemas.User.findById(family.mother.node)
             return {
                 isVerified,
                 node
@@ -188,14 +286,15 @@ module.exports = {
         },
         father: async (family, args, { mongoSchemas }) => {
             const isVerified = family.father.isVerified
-            const node = await mongoSchemas.User.findById(family.mother.node)
+            const node = await mongoSchemas.User.findById(family.father.node)
+            console.log(node)
             return {
                 isVerified,
                 node
             }
         },
         fratery: async (family, args, { mongoSchemas }) => {
-            const ids = family.fratery.map(_v => _v.node)
+            const ids = family.fratery.map(_v => _v.node._id)
             const users = await mongoSchemas.User.find({ _id: { $in: ids } })
             await ids.forEach(( id, i) => {
                 users[i] = {
