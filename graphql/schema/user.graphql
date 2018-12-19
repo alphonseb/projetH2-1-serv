@@ -8,6 +8,7 @@ type User {
     profilePicture: Media!
     gender: String!
     phone: String
+    city: String
     birth: Birth
     work: String
     loveSituation: String

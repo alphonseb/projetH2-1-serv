@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const { getUserId, writeFile } = require('../../utils')
+const { Mutation: { createNotification } } = require('./notification')
 
 const oppositeFamilyType = {
     father: 'children',
@@ -27,6 +28,8 @@ module.exports = {
             return user
         },
         async searchUser (parent, { name }, { mongoSchemas }) {
+            if (name === '')
+                return []
             const users = mongoSchemas.User.find({ name: { $regex: name, $options: 'gi' }}) 
             return users
         }
@@ -38,7 +41,7 @@ module.exports = {
 
             if (args.data.birth)
                 args.data.birth = { ...user.birth, ...args.data.birth}
-
+            
             if (typeof args.data.profilePicture !== undefined) {
                 const { filename, createReadStream } = await args.data.profilePicture
                 const src = await writeFile(id, filename, 'profilePic', createReadStream)
@@ -84,6 +87,8 @@ module.exports = {
 
                 // const fromUserGender = mongoSchemas.User.findById(fromUserId, 'gender')
                 const { gender } = await mongoSchemas.User.findById(id, 'gender')
+                
+                const fromUser = mongoSchemas.User.findById(fromUserId)
 
                 switch (type) {
                     case 'father':
@@ -95,6 +100,12 @@ module.exports = {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
+                        createNotification('', {
+                            from: fromUserId,
+                            to: id,
+                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'fils': 'fille'} ${fromUser.name} vous a ajouté`,
+                            type: 'VALIDATE'
+                        }, { mongoSchemas })
                         break;
                 
                     case 'mother':
@@ -106,6 +117,12 @@ module.exports = {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
+                        createNotification('', {
+                            from: fromUserId,
+                            to: id,
+                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'fils': 'fille'} ${fromUser.name} vous a ajouté`,
+                            type: 'VALIDATE'
+                        }, { mongoSchemas })
                         break;
                 
                     case 'fratery':
@@ -117,6 +134,12 @@ module.exports = {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
+                        createNotification('', {
+                            from: fromUserId,
+                            to: id,
+                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'frère': 'soeur'} ${fromUser.name} vous a ajouté`,
+                            type: 'VALIDATE'
+                        }, { mongoSchemas })
                         break;
         
                     case 'partner':
@@ -128,6 +151,12 @@ module.exports = {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
+                        createNotification('', {
+                            from: fromUserId,
+                            to: id,
+                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'conjoint': 'conjointe'} ${fromUser.name} vous a ajouté`,
+                            type: 'VALIDATE'
+                        }, { mongoSchemas })
                         break;
                             
                     case 'children':
@@ -142,6 +171,12 @@ module.exports = {
                             isVerified: false,
                             node: fromUserId
                         }}}, { new: true }))
+                        createNotification('', {
+                            from: fromUserId,
+                            to: id,
+                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'père': 'mère'} ${fromUser.name} vous a ajouté`,
+                            type: 'VALIDATE'
+                        }, { mongoSchemas })
                         break;
 
                     default:
@@ -258,20 +293,10 @@ module.exports = {
         }
     },
     resolvers: {
-        async books (user, args, { mongoSchemas }) {          
-            return await mongoSchemas.Book
+        books: async (user, args, { mongoSchemas }) => await mongoSchemas.Book
                 .find({ author: user._id}, null, { limit: args.limit ? args.limit : null })
-                .sort(`${args.order === 'DATE_ASC' ? '' : '-'}date`)
-        },
-        async profilePicture (user, args, { mongoSchemas }) {
-            if (!user.profilePicture)
-                return {
-                    id: '',
-                    src: '',
-                    author: ''
-                }
-            return await mongoSchemas.Media.findById(user.profilePicture)
-        },
+                .sort(`${args.order === 'DATE_ASC' ? '' : '-'}date`),
+        profilePicture: async (user, args, { mongoSchemas }) => await mongoSchemas.Media.findById(user.profilePicture),
         notifications: async (user, args, { mongoSchemas }) => await mongoSchemas.Notification.find({ to: user._id}),
         family: async (user, args, { mongoSchemas }) => await mongoSchemas.Family.findOne({user: user._id}),
     },

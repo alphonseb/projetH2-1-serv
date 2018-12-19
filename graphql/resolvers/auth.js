@@ -1,4 +1,4 @@
-const { APP_SECRET } = require('dotenv').config({ path: './.env'}).parsed
+const { APP_SECRET, APP_URL } = require('dotenv').config({ path: './.env'}).parsed
 
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
@@ -10,8 +10,11 @@ module.exports = {
             const pass = await bcrypt.hash(args.password, 10)
 
             const familyId = mongoose.Types.ObjectId()
+            const userId = mongoose.Types.ObjectId()
 
-            const user = await new mongoSchemas.User({_id: mongoose.Types.ObjectId(), ...args, password: pass, family: familyId}).save()
+            const media = await new mongoSchemas.Media({ _id: mongoose.Types.ObjectId(), author: userId, src: `${APP_URL}/static/default.png`}).save()
+
+            const user = await new mongoSchemas.User({_id: userId, ...args, password: pass, family: familyId, profilePicture: media._id}).save()
 
             await new mongoSchemas.Family({_id: familyId, user: user._id}).save()
 

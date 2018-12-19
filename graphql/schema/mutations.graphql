@@ -55,6 +55,7 @@ input updateUserData {
     profilePicture: Upload
     gender: String
     birth: BirthInput
+    city: String
     phone: String
     work: String
     loveSituation: String

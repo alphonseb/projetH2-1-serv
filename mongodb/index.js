@@ -11,6 +11,7 @@ const User = mongoose.model('User',{
         date: Date,
         place: String
     },
+    city: String,
     work: {type: String},
     loveSituation: {type: String},
     hobbies: [{type: String}],
