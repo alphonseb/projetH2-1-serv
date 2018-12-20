@@ -3,4 +3,5 @@ type Media {
     src: String!
     author: User!
     book: Book
+    description: String
 }

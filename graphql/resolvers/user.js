@@ -42,7 +42,7 @@ module.exports = {
             if (args.data.birth)
                 args.data.birth = { ...user.birth, ...args.data.birth}
             
-            if (typeof args.data.profilePicture !== undefined) {
+            if (args.data.profilePicture !== undefined) {
                 const { filename, createReadStream } = await args.data.profilePicture
                 const src = await writeFile(id, filename, 'profilePic', createReadStream)
 
@@ -88,7 +88,7 @@ module.exports = {
                 // const fromUserGender = mongoSchemas.User.findById(fromUserId, 'gender')
                 const { gender } = await mongoSchemas.User.findById(id, 'gender')
                 
-                const fromUser = mongoSchemas.User.findById(fromUserId)
+                const fromUser = await mongoSchemas.User.findById(fromUserId)
 
                 switch (type) {
                     case 'father':
@@ -103,7 +103,7 @@ module.exports = {
                         createNotification('', {
                             from: fromUserId,
                             to: id,
-                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'fils': 'fille'} ${fromUser.name} vous a ajouté`,
+                            content: `Votre ${fromUser.gender.toLowerCase() === 'homme' ? 'fils': 'fille'} ${fromUser.name} vous a ajouté`,
                             type: 'VALIDATE'
                         }, { mongoSchemas })
                         break;
@@ -120,7 +120,7 @@ module.exports = {
                         createNotification('', {
                             from: fromUserId,
                             to: id,
-                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'fils': 'fille'} ${fromUser.name} vous a ajouté`,
+                            content: `Votre ${fromUser.gender.toLowerCase() === 'homme' ? 'fils': 'fille'} ${fromUser.name} vous a ajouté`,
                             type: 'VALIDATE'
                         }, { mongoSchemas })
                         break;
@@ -137,7 +137,7 @@ module.exports = {
                         createNotification('', {
                             from: fromUserId,
                             to: id,
-                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'frère': 'soeur'} ${fromUser.name} vous a ajouté`,
+                            content: `Votre ${fromUser.gender.toLowerCase() === 'homme' ? 'frère': 'soeur'} ${fromUser.name} vous a ajouté`,
                             type: 'VALIDATE'
                         }, { mongoSchemas })
                         break;
@@ -154,7 +154,7 @@ module.exports = {
                         createNotification('', {
                             from: fromUserId,
                             to: id,
-                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'conjoint': 'conjointe'} ${fromUser.name} vous a ajouté`,
+                            content: `Votre ${fromUser.gender.toLowerCase() === 'homme' ? 'conjoint': 'conjointe'} ${fromUser.name} vous a ajouté`,
                             type: 'VALIDATE'
                         }, { mongoSchemas })
                         break;
@@ -174,7 +174,7 @@ module.exports = {
                         createNotification('', {
                             from: fromUserId,
                             to: id,
-                            content: `Votre ${$fromUser.geneder === 'Homme' ? 'père': 'mère'} ${fromUser.name} vous a ajouté`,
+                            content: `Votre ${fromUser.gender === 'homme' ? 'père': 'mère'} ${fromUser.name} vous a ajouté`,
                             type: 'VALIDATE'
                         }, { mongoSchemas })
                         break;
@@ -294,7 +294,7 @@ module.exports = {
     },
     resolvers: {
         books: async (user, args, { mongoSchemas }) => await mongoSchemas.Book
-                .find({ author: user._id}, null, { limit: args.limit ? args.limit : null })
+                .find({ to: user._id}, null, { limit: args.limit ? args.limit : null })
                 .sort(`${args.order === 'DATE_ASC' ? '' : '-'}date`),
         profilePicture: async (user, args, { mongoSchemas }) => await mongoSchemas.Media.findById(user.profilePicture),
         notifications: async (user, args, { mongoSchemas }) => await mongoSchemas.Notification.find({ to: user._id}),
@@ -312,7 +312,6 @@ module.exports = {
         father: async (family, args, { mongoSchemas }) => {
             const isVerified = family.father.isVerified
             const node = await mongoSchemas.User.findById(family.father.node)
-            console.log(node)
             return {
                 isVerified,
                 node

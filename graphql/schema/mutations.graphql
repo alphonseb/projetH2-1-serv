@@ -8,7 +8,7 @@ type Mutation {
     readNotifications(ids: [String!]!): MultipleUpdate
     addFamilyMember(users: [addFamilyInput!]!): [FamilyUser]
     familyMemberHasVerify(fromId: String!, type: familyType): User
-    createBook(title: String! content: String! date: Date!): Book!
+    createBook(id: String title: String! content: String! date: Date!): Book!
     updateBook(id: String! title: String content: String date: Date): Book!
     deleteBook(id: String!): Book!
     addMedia(bookId: String! file: Upload! description: String!): Media!
@@ -70,5 +70,5 @@ input BirthInput {
 
 input addFamilyInput {
     id: String! 
-    type: familyType
+    type: familyType!
 }

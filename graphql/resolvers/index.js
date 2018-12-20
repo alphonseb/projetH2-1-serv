@@ -7,7 +7,8 @@ const Notification = require('./notification')
 
 module.exports = {
     Query: {
-        ...User.Query
+        ...User.Query,
+        ...Book.Query
     },
     Mutation: {
         ...User.Mutation,

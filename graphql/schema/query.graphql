@@ -2,4 +2,5 @@ type Query {
     me: User!
     user (id: String): User!
     searchUser(name: String!): [User!]!
+    book(id: String!): Book
 }

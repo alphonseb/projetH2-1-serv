@@ -49,6 +49,7 @@ const Book = mongoose.model('Book', {
     _id: mongoose.Schema.Types.ObjectId,
     title: {type: String, trim: true},
     author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    to: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     content: {type: String, trim: true},
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
     medias: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Media' }],
@@ -61,7 +62,8 @@ const Media = mongoose.model('Media',{
     author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     src: String,
     book: {type: mongoose.Schema.Types.ObjectId, ref: 'Book'},
-    description: String
+    description: String,
+    createdAt: {type: Date, default: new Date()}
 }, 'media')
 
 const Notification = mongoose.model('Notification', {

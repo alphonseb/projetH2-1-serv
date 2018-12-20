@@ -2,14 +2,17 @@ const mongoose = require('mongoose')
 const { getUserId } = require('../../utils')
 
 module.exports = {
-    Query: {},
+    Query: {
+        book: async (parent, { id }, { mongoSchemas }) => await mongoSchemas.Book.findById(id)
+    },
     Mutation: {
-        async createBook (parent, { title, content, date }, { req, mongoSchemas }) {
-            const id = await getUserId(req)
+        async createBook (parent, { id, title, content, date }, { req, mongoSchemas }) {
+            const authorId = await getUserId(req)
             return await await new mongoSchemas.Book({
                 _id: mongoose.Types.ObjectId(),
                 title,
-                author: id,
+                author: authorId,
+                to: id ? id : authorId,
                 content,
                 date: Date.parse(date)
             }).save()
@@ -25,6 +28,7 @@ module.exports = {
     },
     resolvers: {
         author: async (book, args, { mongoSchemas }) => await mongoSchemas.User.findById(book.author),
+        to: async (book, args, { mongoSchemas }) => await mongoSchemas.User.findById(book.to),
         comments: async (book, args, { mongoSchemas }) => await mongoSchemas.Comment.find({book: book.id}),
         medias: async (book, args, { mongoSchemas }) => await mongoSchemas.Media.find({ _id: { $in: book.medias }})
     }

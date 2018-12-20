@@ -37,14 +37,14 @@ type Notification {
 type Family {
     mother: FamilyUser!
     father: FamilyUser!
-    fratery: [FamilyUser!]!
+    fratery: [FamilyUser]!
     partner: FamilyUser!
-    children: [FamilyUser!]!
+    children: [FamilyUser]!
 }
 
 type FamilyUser {
     isVerified: Boolean!
-    node: User!
+    node: User
 }
 
 enum BookOrder {
