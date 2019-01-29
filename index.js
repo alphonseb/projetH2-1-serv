@@ -44,13 +44,13 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app })
 
-const httpsServer = https.createServer(app)
+// const httpsServer = https.createServer(app)
 
 // {
 //     key: fs.readFileSync('/etc/letsencrypt/live/julesguesnon.com/privkey.pem'),
 //         cert: fs.readFileSync('/etc/letsencrypt/live/julesguesnon.cert.pem')
 // // },
 
-httpsServer.listen(process.env.PORT || 4000, () => {
-    console.log(`🚀  Server ready at localhost:4000`)
-})
+app.listen({ port: process.env.PORT || 4000 }, url =>
+    console.log(`🚀 Server ready at ${url}`)
+)
