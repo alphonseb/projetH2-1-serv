@@ -10,12 +10,14 @@ const typeDefs = require('./graphql/schema')
 const resolvers = require('./graphql/resolvers')
 const mongoSchemas = require('./mongodb')
 
-const { DB_USER, DB_PASSWORD } = require('dotenv').config({
-    path: './.env'
-}).parsed
+// const { DB_USER, DB_PASSWORD } = require('dotenv').config({
+//     path: './.env'
+// }).parsed
 
 mongoose.connect(
-    `mongodb://${DB_USER}:${DB_PASSWORD}@ds143971.mlab.com:43971/family-shelf`,
+    `mongodb://${process.env.DB_USER}:${
+        process.env.DB_PASSWORD
+    }@ds143971.mlab.com:43971/family-shelf`,
     {
         useNewUrlParser: true
     }
