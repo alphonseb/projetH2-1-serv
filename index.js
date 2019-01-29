@@ -52,5 +52,5 @@ server.applyMiddleware({ app })
 // // },
 
 app.listen({ port: process.env.PORT || 4000 }, url =>
-    console.log(`🚀 Server ready at ${url}`)
+    console.log(`🚀 Server ready at ${process.env.PORT}`)
 )
