@@ -23,6 +23,10 @@ mongoose.connect(
     }
 )
 
+mongoose.connection.on('connected', () => {
+    console.log('db connected')
+})
+
 const app = express()
 
 app.use('/static', express.static(__dirname + '/upload/'))
