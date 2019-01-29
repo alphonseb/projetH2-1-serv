@@ -51,6 +51,6 @@ const httpsServer = https.createServer(app)
 //         cert: fs.readFileSync('/etc/letsencrypt/live/julesguesnon.cert.pem')
 // // },
 
-httpsServer.listen(4000, () => {
-    console.log(`🚀  Server ready at localhost:4000`)
+httpsServer.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`)
 })
