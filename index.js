@@ -51,4 +51,6 @@ server.applyMiddleware({ app })
 //         cert: fs.readFileSync('/etc/letsencrypt/live/julesguesnon.cert.pem')
 // // },
 
-app.listen({ port: PORT }, () => console.log(`🚀 Server ready at whatever}`))
+app.listen({ port: process.env.PORT }, () =>
+    console.log(`🚀 Server ready at whatever}`)
+)
