@@ -30,7 +30,13 @@ mongoose.connection.on('connected', () => {
 const app = express()
 
 app.use('/static', express.static(__dirname + '/upload/'))
-app.use(cors())
+
+const corsOptions = {
+    origin: 'https://www.shelf-app.alphonsebouy.fr',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions))
 app.use(helmet())
 
 const server = new ApolloServer({
