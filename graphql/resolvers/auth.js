@@ -16,7 +16,7 @@ module.exports = {
             const media = await new mongoSchemas.Media({
                 _id: mongoose.Types.ObjectId(),
                 author: userId,
-                src: `${process.env.APP_URL}/static/default.png`
+                src: `${process.env.FILES_URL}/static/default.png`
             }).save()
 
             const user = await new mongoSchemas.User({
