@@ -31,12 +31,10 @@ const app = express()
 
 app.use('/static', express.static(__dirname + '/upload/'))
 
-const corsOptions = {
-    origin: 'https://www.shelf-app.alphonsebouy.fr',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
-app.use(cors(corsOptions))
+app.options('*', cors())
+app.del('*', cors(), function(req, res, next) {
+    res.json({ msg: 'This is CORS-enabled for all origins!' })
+})
 app.use(helmet())
 
 const server = new ApolloServer({
