@@ -31,7 +31,7 @@ const writeFile = async (_id, _name, _type, _createReadStream) => {
     const stream = _createReadStream()
     stream.pipe(fs.createWriteStream(filePath))
 
-    return `${process.env.FILES_URL}/static/${name}`
+    return `${process.env.APP_URL}/static/${name}`
 }
 
 const deleteFile = async _src => {
