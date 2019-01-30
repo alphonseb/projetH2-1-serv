@@ -32,7 +32,7 @@ const app = express()
 app.use('/static', express.static(__dirname + '/upload/'))
 
 app.options('*', cors())
-app.del('*', cors(), function(req, res, next) {
+app.delete('*', cors(), function(req, res, next) {
     res.json({ msg: 'This is CORS-enabled for all origins!' })
 })
 app.use(helmet())
